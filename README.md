@@ -1,4 +1,4 @@
-Project Description
+**Project Description**
 
 • The Event Scheduler App is a full-stack web application that helps users plan, manage, and track events efficiently.
 
@@ -14,7 +14,7 @@ Project Description
 
 • Offers a real-time and interactive experience, enhancing productivity and time management.
 
-main features
+**main features**
 
 • Add New Events: Users can easily create new events with details like title, date, and description.
 
@@ -30,6 +30,9 @@ main features
 
 • Database Support: All event data is stored securely in MongoDB.
 
-Technology used
+**Technology used**
 
-Frontend: React.js, Axios, CSS Backend: Node.js, Express.js Database: MongoDB Version Control: Git & GitHub
+Frontend: React.js, Axios, CSS
+Backend: Node.js, Express.js 
+Database: MongoDB 
+Version Control: Git & GitHub
