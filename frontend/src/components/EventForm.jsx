@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
-import { createEvent } from '../api';
+import React, { useState, useEffect } from 'react';
+import { createEvent, updateEvent } from '../api';
 
-export default function EventForm({ onAdded }) {
+export default function EventForm({ onAdded, editingEvent, onUpdated }) {
   const [form, setForm] = useState({
-    title: '', description: '', location: '', startTime: '', endTime: ''
+    title: '',
+    description: '',
+    location: '',
+    startTime: '',
+    endTime: ''
   });
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
+
+  // Pre-fill form when editing
+  useEffect(() => {
+    if (editingEvent) {
+      setForm({
+        title: editingEvent.title || '',
+        description: editingEvent.description || '',
+        location: editingEvent.location || '',
+        startTime: editingEvent.startTime ? editingEvent.startTime.slice(0, 16) : '',
+        endTime: editingEvent.endTime ? editingEvent.endTime.slice(0, 16) : ''
+      });
+    } else {
+      setForm({ title: '', description: '', location: '', startTime: '', endTime: '' });
+    }
+  }, [editingEvent]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -16,20 +35,28 @@ export default function EventForm({ onAdded }) {
       alert('Fill title, start and end time');
       return;
     }
+
     try {
-      await createEvent(form);
+      if (editingEvent) {
+        await updateEvent(editingEvent._id, form);
+        onUpdated && onUpdated();
+      } else {
+        await createEvent(form);
+        onAdded && onAdded();
+      }
+
+      // Reset form after submit
       setForm({ title: '', description: '', location: '', startTime: '', endTime: '' });
-      onAdded && onAdded();
     } catch (err) {
       console.error(err);
-      alert('Failed to create event');
+      alert('Failed to save event');
     }
   }
 
   return (
- <div className="event-page">
+    <div className="event-page">
       <div className="event-box">
-        <h2>Add Event</h2>
+        <h2>{editingEvent ? 'Edit Event' : 'Add Event'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="event-fields">
             <input name="title" placeholder="Title" value={form.title} onChange={handleChange} />
@@ -38,7 +65,7 @@ export default function EventForm({ onAdded }) {
             <input type="datetime-local" name="startTime" value={form.startTime} onChange={handleChange} />
             <input type="datetime-local" name="endTime" value={form.endTime} onChange={handleChange} />
           </div>
-          <button type="submit">Add Event</button>
+          <button type="submit">{editingEvent ? 'Update Event' : 'Add Event'}</button>
         </form>
       </div>
     </div>
