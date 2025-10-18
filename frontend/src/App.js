@@ -9,6 +9,7 @@ function App() {
   const { user, logout } = useContext(AuthContext);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showSignup, setShowSignup] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
 
   if (!user) {
     return (
@@ -33,8 +34,12 @@ function App() {
       </div>
 
       {/* Event Form & List */}
-      <EventForm onAdded={() => setRefreshKey(prev => prev + 1)} />
-      <EventList refreshKey={refreshKey} />
+      <EventForm 
+       editingEvent={editingEvent} 
+       onAdded={() => setRefreshKey(prev => prev + 1)} 
+       onUpdated={() => { setRefreshKey(prev => prev + 1); setEditingEvent(null); }}
+        />
+      <EventList refreshKey={refreshKey} setEditingEvent={setEditingEvent} />
     </div>
   );
 }
