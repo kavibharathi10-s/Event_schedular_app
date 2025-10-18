@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getEvents, deleteEvent } from '../api';
 
-export default function EventList({ refreshKey }) {
+export default function EventList({ refreshKey, setEditingEvent }) { // receive setEditingEvent
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,6 +40,8 @@ export default function EventList({ refreshKey }) {
           </div>
           <div>
             <button onClick={() => handleDelete(ev._id)}>Delete</button>
+            {/* Pass event to App.js to trigger edit */}
+            <button onClick={() => setEditingEvent(ev)}>Edit</button>
           </div>
         </li>
       ))}
